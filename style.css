@@ -62,7 +62,8 @@ h1 {
 .display-image {
     width: 75%;
     height: 200px;
-    background: black;
+    background:  black;
+    background-image: url('images/placeholderimage.jpg');
     border-radius: 10px;
     background-size: cover;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
@@ -138,7 +139,7 @@ h1 {
 .controls{
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin: auto;
 }
