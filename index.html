@@ -8,41 +8,53 @@
     <title>Music Player</title>
     <link rel="stylesheet" href="style.css">
     <script src = "javascript.js"></script>
+    <script src = "buttonpress.js"></script>
     </head>
 
     <body>
-    <div class="container">
-        <div class="musicplayer">
-        <h1>Music Player</h1>
-        <div class="track-info">
-            <h2 id="track-name">Track Name</h2>
-            <p id="artist-name">Artist Name</p>
-            </div>
-            <div class="display-image">
-                <button id="shuffle">
-  <img id="shuffle-icon" src="images/shuffle.png" alt="Shuffle" width="24" height="24">
-</button>
+  <div class="container">
+    <div class="musicplayer">
+      <h1>Music Player</h1>
 
-<input type="range" id="volume-slider" min="0" max="100" value="100" />
+      <div class="track-info">
+        <h2 id="track-name">Track Name</h2>
+        <p id="artist-name">Artist Name</p>
+      </div>
 
-            </div>
-            <div class="slider">
-                <input type="range" value="0" class="seekbar">
-                <span class="current-time">0:00</span>
-                <span class="song-duration">0:00</span>
-            </div>
-        <nav>
-            <div class="controls">
-            <button id="previous">
-                <img id="previous" src="images/previous.png" alt="Play" width="24" height="24">
-            </button>
-            <button id="play">
-                <img id="play-icon" src="images/play.png" alt="Play" width="24" height="24">
-                <audio id="audio" src="" id="audio"></audio>
-            </button>
-            <button id="next">
-                <img id="next-icon" src="images/next.png" alt="Play" width="24" height="24">
-            </button>
+      <div class="display-image"></div>
+
+      <div class="controls-top">
+        <button id="shuffle">
+          <img id="shuffle-icon" src="images/shuffle.png" alt="Shuffle" width="24" height="24">
+        </button>
+
+        <input type="range" id="volume-slider" min="0" max="100" value="100" />
+      </div>
+
+      <div class="slider">
+        <input type="range" value="0" class="seekbar">
+        <span class="current-time">0:00</span>
+        <span class="song-duration">0:00</span>
+      </div>
+
+      <nav>
+        <div class="controls">
+          <button id="previous">
+            <img src="images/previous.png" alt="Previous" width="24" height="24">
+          </button>
+
+          <button id="play">
+            <img id="play-icon" src="images/play.png" alt="Play" width="24" height="24">
+          </button>
+
+          <button id="next">
+            <img id="next-icon" src="images/next.png" alt="Next" width="24" height="24">
+          </button>
         </div>
-    </nav>
+      </nav>
+
+      <!-- Required audio element -->
+      <audio id="audio"></audio>
     </div>
+  </div>
+</body>
