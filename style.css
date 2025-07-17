@@ -183,3 +183,17 @@ h1 {
     width: 24px;
     height: 24px;
 }
+.top-controls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 2 10px;
+}
+
+.top-controls #volume-slider {
+    width: 100px;
+    margin-left: 0;
+}
+
