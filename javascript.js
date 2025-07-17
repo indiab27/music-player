@@ -20,18 +20,21 @@ document.addEventListener('DOMContentLoaded', () => {
   let isShuffle = false;
   let currentTrack = 0;
 
-  const musicList = [
-    { name: "Track One", artist: "Sabrina Carpenter", path: "music/1.mp3", cover: "images/1.jpg" },
-    { name: "Track Two", artist: "Lady Gaga", path: "songs/Lady Gaga - Abracadabra.mp3", cover: "images/2.jpg" },
-    { name: "Track Three", artist: "JHOPE ft Miguel", path: "songs/JHOPE (feat. Miguel) - Sweet Dreams.mp3", cover: "images/3.jpg" }
+  let musicList = [
+    { name: "Espresso", artist: "Sabrina Carpenter", path: "songs/Sabrina Carpenter - Espresso.mp3", cover: "images/Espresso_-_Sabrina_Carpenter.png" },
+    { name: "Abracadabra", artist: "Lady Gaga", path: "songs/Lady Gaga - Abracadabra.mp3", cover: "images/Lady_Gaga cover.jpg" },
+    { name: "Sweet Dreams", artist: "JHOPE ft Miguel", path: "songs/JHOPE (feat. Miguel) - Sweet Dreams.mp3", cover: "images/J-Hope_&_Miguel_-_Sweet_Dreams.jpg" },
+    { name: "Birds of a Feather", artist: "Billie Eilish", path: "songs/Billie Eilish - BIRDS OF A FEATHER.mp3", cover: "images/billie eilish_Birds of a feather.png" },
+    { name: "Not Like Us", artist: "Kendrick Lamar", path: "songs/Kendrick Lamar - Not Like Us.mp3", cover: "images/Not Like Us_ Kendrick Lamar.jpg" },
+    { name: "Apple", artist: "Charli XCX", path: "songs/Charli XCX - Apple.mp3", cover: "images/Charli_XCX_-_Brat_(album_cover).png" }
   ];
 
+  const originalOrder = [...musicList];
+
   const formatTime = (time) => {
-    let minutes = Math.floor(time / 60);
-    let seconds = Math.floor(time % 60);
-    if (minutes < 10) minutes = "0" + minutes;
-    if (seconds < 10) seconds = "0" + seconds;
-    return `${minutes}:${seconds}`;
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
   };
 
   const loadTrack = (index) => {
@@ -42,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
     displayImage.innerHTML = `<img src="${track.cover}" alt="Cover" width="200">`;
 
     seekBar.value = 0;
-    seekBar.max = 0;
     currentTimeDisplay.textContent = "00:00";
     durationDisplay.textContent = "00:00";
 
@@ -54,76 +56,93 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isPlaying) {
       audio.play().then(() => {
         playIcon.src = "images/pause.png";
-        isPlaying = true;
-      }).catch(err => console.error("Playback failed:", err));
+      }).catch(err => {
+        console.error("Autoplay failed:", err);
+        isPlaying = false;
+        playIcon.src = "images/play.png";
+      });
     } else {
       playIcon.src = "images/play.png";
     }
   };
 
-  // Play/Pause toggle
   playButton.addEventListener('click', () => {
-    if (isPlaying) {
-      audio.pause();
-      playIcon.src = "images/play.png";
-      isPlaying = false;
-    } else {
+    if (!isPlaying) {
       audio.play().then(() => {
-        playIcon.src = "images/pause.png";
         isPlaying = true;
+        playIcon.src = "images/pause.png";
       }).catch(err => {
-        console.error("Playback error:", err);
+        console.error("Playback failed:", err);
       });
+    } else {
+      audio.pause();
+      isPlaying = false;
+      playIcon.src = "images/play.png";
     }
   });
 
-  // Seek bar updates while song plays
   audio.addEventListener('timeupdate', () => {
     seekBar.value = audio.currentTime;
     currentTimeDisplay.textContent = formatTime(audio.currentTime);
-
     if (audio.ended) {
-      nextButton.click(); // auto next
+      nextButton.click();
     }
   });
 
-  // Seekbar interaction
   seekBar.addEventListener('input', () => {
     audio.currentTime = seekBar.value;
   });
 
-  // Volume control
   volumeSlider.addEventListener('input', () => {
     audio.volume = volumeSlider.value / 100;
   });
 
-  // Shuffle toggle
   shuffleButton.addEventListener('click', () => {
     isShuffle = !isShuffle;
     shuffleIcon.classList.toggle('active', isShuffle);
     shuffleButton.classList.toggle('active');
-  });
 
-  // Next track
-  nextButton.addEventListener('click', () => {
     if (isShuffle) {
+      // Shuffle the musicList array
+      const currentTrackData = musicList[currentTrack];
+      musicList = musicList
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+
+      // Update currentTrack index to current song's new position
+      currentTrack = musicList.findIndex(track => track.path === currentTrackData.path);
+
+      // Immediately change to a random track
+      // Pick a random index different from currentTrack for more variety
       let randomIndex;
       do {
         randomIndex = Math.floor(Math.random() * musicList.length);
       } while (randomIndex === currentTrack);
       currentTrack = randomIndex;
+      loadTrack(currentTrack);
+
     } else {
-      currentTrack = (currentTrack + 1) % musicList.length;
+      // Restore original order
+      const currentTrackData = musicList[currentTrack];
+      musicList = [...originalOrder];
+
+      // Update currentTrack index based on original order
+      currentTrack = musicList.findIndex(track => track.path === currentTrackData.path);
+      loadTrack(currentTrack);
     }
+  });
+
+  nextButton.addEventListener('click', () => {
+    currentTrack = (currentTrack + 1) % musicList.length;
     loadTrack(currentTrack);
   });
 
-  // Previous track
   previousButton.addEventListener('click', () => {
     currentTrack = (currentTrack - 1 + musicList.length) % musicList.length;
     loadTrack(currentTrack);
   });
 
-  // Load the first track
+  // Initial load
   loadTrack(currentTrack);
 });

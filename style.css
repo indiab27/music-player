@@ -63,7 +63,7 @@ h1 {
     width: 75%;
     height: 200px;
     background:  black;
-    background-image: url('images/placeholderimage.jpg');
+    background-image: url('');
     border-radius: 10px;
     background-size: cover;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
